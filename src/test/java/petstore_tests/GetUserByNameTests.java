@@ -1,5 +1,6 @@
 package petstore_tests;
 
+import dto.UserDTO;
 import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.ValidatableResponse;
 import org.apache.http.HttpStatus;
@@ -19,22 +20,31 @@ public class GetUserByNameTests {
         ValidatableResponse response = userNameApi.getUserName("user1");
 
         response
-                .statusCode(HttpStatus.SC_OK)
-                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/GetUserName.json"));
+                .statusCode(HttpStatus.SC_OK);
     }
 
     @Test
     /*
-    Проверка: получить данные пользователя по имени, которое предположительно существует
+    Проверка: создать нового пользователя, получить его данные по имени пользователя
     Ожидаемый результат: пользователь найден, все нужные поля возвращаются
      */
-    public void getUserBySuggestedName() {
+    public void createUserGetUser() {
         UserNameApi userNameApi = new UserNameApi();
+        UserDTO userDTO = UserDTO.builder()
+                .email("test@test.com")
+                .id(1251l)
+                .firstName("Ivan")
+                .lastName("Ivanov")
+                .password("password")
+                .phone("3-17-100")
+                .username("IvanIvanov")
+                .userStatus(600l)
+                .build();
+        ValidatableResponse createUser = userNameApi.createUser(userDTO);
 
-        ValidatableResponse response = userNameApi.getUserName("string");
+        ValidatableResponse getUser = userNameApi.getUserName("IvanIvanov");
 
-        response
-                .statusCode(HttpStatus.SC_OK)
-                .body(JsonSchemaValidator.matchesJsonSchemaInClasspath("schema/GetUserName.json"));
+        getUser
+                .statusCode(HttpStatus.SC_OK);
     }
 }

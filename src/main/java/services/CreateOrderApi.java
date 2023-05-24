@@ -6,25 +6,27 @@ import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import static io.restassured.RestAssured.given;
 
-public class CreateOrderApi {
-    private static final String BASE_URL = "https://petstore.swagger.io/v2";
+public class CreateOrderApi extends Specifications {
     private static final String ORDER = "/store/order";
-    private RequestSpecification spec;
-
-    public CreateOrderApi() {
-        spec = given()
-                .baseUri(BASE_URL)
-                .contentType(ContentType.JSON);
-    }
 
     public ValidatableResponse createOrder (PetOrderDTO petOrderDTO) {
 
-        return given(spec)
+        return given(requestSpec)
                     .log().all()
                     .body(petOrderDTO)
                 .when()
                     .post(ORDER)
                 .then()
                     .log().all();
+    }
+
+    public ValidatableResponse getOrder (String id) {
+
+            return given(requestSpec)
+                        .log().all()
+                    .when()
+                        .get(ORDER + "/" + id)
+                    .then()
+                        .log().all();
     }
 }

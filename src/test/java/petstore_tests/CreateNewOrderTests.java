@@ -11,14 +11,14 @@ public class CreateNewOrderTests {
 
     @Test
     /*
-    Проверка: создать новый заказ с корректно заполненными полями
-    Ожидаемый результат: заказ создан
+    Проверка: создать новый заказ с корректно заполненными полями, найти его по id
+    Ожидаемый результат: заказ создан, ищется
      */
-    public void createNewOrderWithCorrectData() {
+    public void createNewOrderGetOrder() {
         CreateOrderApi createOrderApi = new CreateOrderApi();
 
         PetOrderDTO petOrderDTO = PetOrderDTO.builder()
-                .id(1020L)
+                .id(9L)
                 .petId(1L)
                 .quantity(1L)
                 .shipDate("2022-05-10T14:15:14.598Z")
@@ -26,9 +26,11 @@ public class CreateNewOrderTests {
                 .status("placed")
                 .build();
 
-        ValidatableResponse response = createOrderApi.createOrder(petOrderDTO);
+        ValidatableResponse createNewOrder = createOrderApi.createOrder(petOrderDTO);
 
-        response
+        ValidatableResponse getOrder = createOrderApi.getOrder("9");
+
+        getOrder
                 .statusCode(HttpStatus.SC_OK);
     }
 
